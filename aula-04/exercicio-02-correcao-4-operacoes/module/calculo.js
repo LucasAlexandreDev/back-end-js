@@ -2,8 +2,8 @@
 
 * Objetivo: Arquivo responsável pelo processamento de calculos matematicos: somar, subtrair, dividir e multiplicar
 * Dev: Lucas Alexandre da Silva
-* Data: 20/01/26
-* Versão: 1.0.1.26
+* Data: 20/02/26
+* Versão: 1.0
 
 */ 
 
@@ -54,25 +54,54 @@ const calcular = function(numero1, numero2, operador){
 // processamento - 2 forma
     switch (operadorMatematico) {
         case 'SOMAR':
-            resultado = valor1 + valor2
+            resultado = operacaoSoma(valor1,valor2)
             break;
             
         case 'SUBTRAIR':
-            resultado = valor1 - valor2
+            resultado = operacaoSubtracao(valor1,valor2)
             break;
         
         case 'DIVIDIR':
-            resultado = valor1 / valor2
+            resultado = operacaoDivisao(valor1,valor2)
             break;
 
         
         case 'MULTIPLICAR':
-            resultado = valor1 * valor2
+            resultado = operacaoMultiplicacao(valor1,valor2)
             break;
+
+        default:
+            return false
+            break;
+    }
+
+    return resultado
+}
+
+// exemplo de função baseada em formato de seta (arrow function)
+const operacaoSoma          =   (numero1, numero2)  => Number(numero1) + Number(numero2)
+const operacaoSubtracao     =   (numero1, numero2)  => Number(numero1) - Number(numero2)
+const operacaoDivisao       =   (numero1, numero2)  => Number(numero1) / Number(numero2)
+const operacaoMultiplicacao =   (numero1, numero2)  => Number(numero1) * Number(numero2)
+
+// // chamando a funçao calcular afim de teste
+// let teste = calcular(40,50, 'subtrair')
+// console.log(teste)
+
+
+const validarDados = (numero1, numero2, operacao) =>{    
+    if(operacao == '' || numero1 == '' || numero2 == '' || isNaN(numero1) || isNaN(numero2)){
+        return false
+    }else{
+        return true
     }
 }
 
-// chamando a funçao calcular afim de teste
-let teste = calcular(20,10, 'divisao')
-console.log(teste)
-
+module.exports = {
+    calcular,
+    operacaoDivisao,
+    validarDados,
+    operacaoSoma,
+    operacaoMultiplicacao,
+    operacaoSubtracao
+}
