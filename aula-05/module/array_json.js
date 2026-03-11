@@ -7,6 +7,8 @@
 
 ****************************************************************************/
 
+const { validarDados } = require("../../aula-04/exercicio-02-correcao-4-operacoes/module/calculo")
+
 /*
 
     [] -> representa um objeto do tipo ARRAY 
@@ -64,7 +66,7 @@ const exibirDados = function(){
     console.log(listaDeAlunos[3])
     console.log(listaDeAlunos[0])
 
-    // // adicionando elementos de forma manual pelo índice
+    // adicionando elementos de forma manual pelo índice
     console.log(`O nome do aluno(a) é: ${listaDeAlunos[0]}`)
     console.log(`O nome do aluno(a) é: ${listaDeAlunos[1]}`)
     console.log(`O nome do aluno(a) é: ${listaDeAlunos[2]}`)
@@ -134,17 +136,108 @@ const manipularDados = function(){
     console.log(listaDeClientes)
     console.table(listaDeClientes)
 
-    // para adicionar no final novos itens dentro do objeto ARRAY, usamos  o 'push' 
+    // para adicionar no FINAL novos elementos dentro do objeto ARRAY, usamos  o 'push' 
     listaDeFornecedores.push('Wendel', 'Luiz', 'Leonid')
     listaDeFornecedores.push('Antônio')
     listaDeFornecedores.push('Maria')
     listaDeFornecedores.push('Caio')
 
-    console.log(listaDeFornecedores)
+    console.table(listaDeFornecedores)
+    
+    // para ADICIONAR no COMEÇO novos elementos dentro do objeto ARRAY, usamos  o 'unshift' 
+    // após adicionar o elemento, ele reorganiza todos os outros itens
+    listaDeFornecedores.unshift('Luciano')
+    console.table(listaDeFornecedores)
 
+    // para ADICIONAR em uma DETERMINADA POSIÇÃO do do objeto ARRAY, usamos  o 'splice' 
+                    //splice(índice, qtde de elementos (sempre zero), 'Novo conteúdo') 
+    listaDeFornecedores.splice(3,0,'Bernado')
+    console.table(listaDeFornecedores)
 
+    // para REMOVER um DETERMINADO CONTEÚDO com base no índice do do objeto ARRAY, usamos  o 'splice'
+                       //splice(índice, qtde de elementos a ser removidos') 
+    listaDeFornecedores.splice(6,1)
+    console.table(listaDeFornecedores)
+
+    // para REMOVER o ÚLTIMO conteúdo do objeto ARRAY, usamos  o 'pop'
+    listaDeFornecedores.pop()
+    console.table(listaDeFornecedores)
+
+    // para REMOVER o PRIMEIRO conteúdo do objeto ARRAY, usamos  o 'shift'
+    // após remover, ele reorganiza todos os outros itens
+    listaDeFornecedores.shift()
+    console.table(listaDeFornecedores)
 }
 
 
 //exibirDados()
-manipularDados()
+//manipularDados()
+
+// função utilizando FOR IN
+const removerAlunoForIn = function(nomeAluno){
+
+    for(indice in listaDeAlunos){
+        
+        if(listaDeAlunos[indice] == nomeAluno){
+            listaDeAlunos.splice(indice, 1)
+        }
+    }
+}
+
+// função utilizando WHILE
+const removerAlunoWhile = function(nomeAluno){
+
+    let contadorInicial = 0
+    let qntdIndice = listaDeAlunos.length
+
+    while(contadorInicial < qntdIndice){
+
+        if(nomeAluno == listaDeAlunos[contadorInicial]){
+            listaDeAlunos.splice(contadorInicial, 1)
+        }
+
+        contadorInicial ++
+    }
+}
+
+// função utilizando FOR
+const removerAlunoFor = function(nomeAluno){
+
+    for(let contadorInicial = 0; contadorInicial < listaDeAlunos.length; contadorInicial++){
+        
+        if(nomeAluno == listaDeAlunos[contadorInicial]){
+            listaDeAlunos.splice(contadorInicial, 1)
+        }
+    }
+}
+
+// função utilizando INDEXOF
+const removerAlunoIndexOf = function(nomeAluno){
+
+    let indice = listaDeAlunos.indexOf(nomeAluno)
+    listaDeAlunos.splice(indice, 1)
+
+    // ou //
+
+    //listaDeAlunos.splice(listaDeAlunos.indexOf(nomeAluno), 1) 
+}
+
+// função capaz de verificar se o item dentro do objeto existe ou não
+const verificarItem = function(nomeAluno){
+
+    // includes -> verifica e devolve um boleano
+    console.log(listaDeAlunos.includes(nomeAluno))
+
+}
+
+
+//console.table(listaDeAlunos)
+//removerAlunoForIn('Lucas')
+//removerAlunoWhile('Lucas')
+//removerAlunoFor('Marcel')
+//removerAlunoFor('Marcel')
+removerAlunoIndexOf('Yuri')
+//console.table(listaDeAlunos)
+
+//verificarItem('Banana')
+
