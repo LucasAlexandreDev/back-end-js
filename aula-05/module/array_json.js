@@ -231,13 +231,180 @@ const verificarItem = function(nomeAluno){
 }
 
 
+// ---------------
+
+// função responsável por criar o objeto JSON 
+const manipularDadosJson = function(){
+
+    // criação de um objeto JSON
+    // a estrutura do JSON é a Chave (atributo): Valor(conteúdo)
+    let aluno = {
+    "id": 1,
+    "ra": 123456, 
+    "nome": 'Lucas',
+    "idade": 17,
+    "email": 'lucas@gmail.com'
+    }
+
+    console.log(aluno)
+    console.table(aluno)
+
+    // EXIBI o CONTEÚDO de um ATRIBUTO JSON
+    console.log(aluno.nome)
+
+    // ADICIONA um NOVO ATRIBUTO no JSON já existente 
+    aluno.telefone = '11-123456'
+    aluno.data_nascimento = '04/06/2008'
+
+    console.log(aluno)
+
+    // REMOVE um ATRIBUTO no JSON já existente 
+    delete aluno.email 
+
+    // SUBSTITUI o VALOR de um ATRIBUTO no JSON já existente
+    aluno.ra = 123456789
+
+    // ADICIONA um NOVO ATRIBUTO sem VALOR no JSON já existente 
+    aluno.nota = null
+
+    console.log(aluno)
+}
+
+
+const cadastroDeProdutos = function(){
+    
+    let cores = [ 
+        {"id": 1, "cor": "white","hexadecimal": "#ffff"},       // índice 0
+        {"id": 2, "cor": "black","hexadecimal": "#0000"},       // índice 1
+        {"id": 3, "cor": "blue","hexadecimal": "#0000ff"},      // índice 2
+        {"id": 4, "cor": "amarelo","hexadecimal": "#ffff00"},   // índice 3
+        {"id": 5, "cor": "rosa","hexadecimal": "#ffb5c0"}       // índice 4
+    ]
+
+    let marcas = [
+        {"id": 1,"marca": "dell","telefone": "11-123456", "email": "dell@gmail.com"},                   // índice 0
+        {"id": 2,"marca": "positivo","telefone": "11-123456", "email": "positivo@gmail.com"},           // índice 1
+        {"id": 3,"marca": "multilaser","telefone": "11-123456", "email": "multilaser@gmail.com"},       // índice 2
+        {"id": 4,"marca": "nvidia","telefone": "11-123456", "email": "nvidia@gmail.com"},               // índice 3
+        {"id": 5,"marca": "apple","telefone": "11-123456", "email": "apple@gmail.com"}                  // índice 4
+
+    ]
+
+    let produtos = [
+        {   "id": 1,
+            "nome": "Monitor", 
+            "descricao": "Monitor de 27 Polegadas",
+            "valor": 1500,
+            "quantidade": 20,
+            "cor": [
+                cores[0],
+                cores[1]
+            ],
+            "marca": [
+                marcas[0]
+            ]
+        },
+
+        {
+            "id": 2,
+            "nome": "Teclado", 
+            "descricao": "Teclado Mecânico RBG",
+            "valor": 250,
+            "quantidade": 500,
+            "cor": cores,
+            "marca": [
+                marcas[2].marca,
+                marcas[3].marca,
+                marcas[4].marca
+            ],
+        },
+
+        {
+            "id": 3,
+            "nome": "Mouse", 
+            "descricao": "Mouse sem fio",
+            "valor": 80,
+            "quantidade": 160,
+            "cor": [
+                cores[0],
+                cores[2],
+                cores[4]
+            ],
+            "marca": [
+                marcas[1].marca,
+                marcas[3].marca,
+                marcas[4].marca,
+               
+            ],
+        },
+    ]
+
+    // extrai o produto
+produtos.forEach(function(itemProduto){
+    console.log(`Produto: ${itemProduto.nome}`)
+        
+    // extrai a cor
+    itemProduto.cor.forEach(function(itemCor){
+        console.log(`Cor: ${itemCor.cor}`)
+    })
+
+    // extrai a marca
+    itemProduto.marca.forEach(function(itemMarca){
+        console.log(`Marca: ${itemMarca}`)
+    }) 
+
+    // extrai o valor
+    itemProduto.valor.forEach(function(itemValor){
+        console.log(`Valor: ${itemValor}`)
+    })  
+})           
+    
+
+    //console.log(produtos[0].cor)
+
+    // exibindo todas as cores referente ao produto ´monitor´
+    // produtos[0].cor.forEach(function(itemCor){
+    //     console.log(itemCor.cor)
+    // })
+
+    //console.log(produtos)
+    //console.table(produtos)
+
+    //console.log(cores)
+    //console.table(cores)
+
+    // como exibir somente um cor específica
+    // chamo a variável cores e atrevés do [], passo o índice, e após eu chamo através do . o atributo que quero 
+    
+    //console.log(cores[2].cor)
+
+    // como exibir todas as cores de uma vez
+    
+    // cores.forEach(function(todasCores){
+    //     console.log(todasCores.cor)
+    // })
+
+    // for(let contadorInicial = 0; contadorInicial < cores.length; contadorInicial++){
+    //     console.log(cores[contadorInicial].cor)
+    // }  
+}
+
+   
+
+
+
+cadastroDeProdutos()
+
+
+
+
 //console.table(listaDeAlunos)
 //removerAlunoForIn('Lucas')
 //removerAlunoWhile('Lucas')
 //removerAlunoFor('Marcel')
 //removerAlunoFor('Marcel')
-removerAlunoIndexOf('Yuri')
+//removerAlunoIndexOf('Yuri')
 //console.table(listaDeAlunos)
-
 //verificarItem('Banana')
+//manipularDadosJson()
 
