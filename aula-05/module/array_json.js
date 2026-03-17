@@ -7,8 +7,6 @@
 
 ****************************************************************************/
 
-const { validarDados } = require("../../aula-04/exercicio-02-correcao-4-operacoes/module/calculo")
-
 /*
 
     [] -> representa um objeto do tipo ARRAY 
@@ -47,356 +45,280 @@ const { validarDados } = require("../../aula-04/exercicio-02-correcao-4-operacoe
     -> Trabalha na horizontal
 */
 
-// criandos objetos do tipo ARRAY
 const listaDeAlunos = ['Lucas', 'Marcel', 'Yuri', 'Leonid', 'Celso', 'Luiz', 'Wendel']
 const listaDeClientes = []
 const listaDeFornecedores = []
 
+/* -------- EXIBIÇÃO E PERCURSO DE DADOS EM ARRAY -------- */
+
 const exibirDados = function(){
-    // exibi o objeto ARRAY com um todo - [conteúdo]
+
+    // exibe o array completo
     console.log(listaDeAlunos) 
 
-    // exibi o objeto ARRAY em formato de uma tabela, mostrando o índice e coteúdo 
+    // exibe em formato de tabela (índice + conteúdo)
     console.table(listaDeAlunos)
     
-    // exibi um tipo de dados de um índice
+    // exibe o tipo de dado de um índice específico
     console.log(typeof(listaDeAlunos[2]))
 
-    // usamos o [] para chamar o índice
+    // acessando valores pelo índice
     console.log(listaDeAlunos[3])
     console.log(listaDeAlunos[0])
 
-    // adicionando elementos de forma manual pelo índice
+    // acesso direto ao valor pelo índice do aluno
     console.log(`O nome do aluno(a) é: ${listaDeAlunos[0]}`)
-    console.log(`O nome do aluno(a) é: ${listaDeAlunos[1]}`)
-    console.log(`O nome do aluno(a) é: ${listaDeAlunos[2]}`)
-    console.log(`O nome do aluno(a) é: ${listaDeAlunos[3]}`)
-    console.log(`O nome do aluno(a) é: ${listaDeAlunos[4]}`)
-    console.log(`O nome do aluno(a) é: ${listaDeAlunos[5]}`)
-    console.log(`O nome do aluno(a) é: ${listaDeAlunos[6]}`)
 
-    // estrutura de repetição usando o WHILE
-    console.log()
-    console.log('--> Exemplo com While <--')
+    // estrutura WHILE (controle manual)
+    console.log('\n--> While <--')
 
     let contadorWhile = 0
 
     while(contadorWhile < listaDeAlunos.length){
-        console.log(`O nome do aluno(a) é: ${listaDeAlunos[contadorWhile]}`)
-        contadorWhile ++
+        console.log(`Aluno: ${listaDeAlunos[contadorWhile]}`)
+        contadorWhile++
     }
 
-    // estrutura de repetição usando o FOR
-    console.log()
-    console.log('--> Exemplo com o For <--')
+    // estrutura FOR (controle por contador)
+    console.log('\n--> For <--')
     
     for(let contadorFor = 0; contadorFor < listaDeAlunos.length; contadorFor++){
-        console.log(`O nome do aluno(a) é: ${listaDeAlunos[contadorFor]}`)
+        console.log(`Aluno: ${listaDeAlunos[contadorFor]}`)
     }
 
-    // estrutura de repetição usando FOR EACH 
-    console.log()
-    console.log('--> Exemplo com o FOR EACH <--')
+    // FOR EACH (percorre direto os valores)
+    console.log('\n--> ForEach <--')
     
-    // para cada item do objeto ele pega e entrega o conteúdo através do argumento de callback 
+    // recebe cada item do array automaticamente
     listaDeAlunos.forEach(function(aluno){
-        console.log(`O nome do aluno(a) é: ${aluno}`)
+        console.log(`Aluno: ${aluno}`)
     })
    
-    // estrutura de repetição usando FOR OF 
-    console.log()
-    console.log('--> Exemplo com o FOR OF <--')
+    // FOR OF (percorre valores diretamente)
+    console.log('\n--> For Of <--')
 
-    // pega o objeto principal e de cada item que tiver, ele adiciona um item na variável
-    for(aluno of listaDeAlunos){
-        console.log(`O nome do aluno(a) é: ${aluno}`)    
+    for(let aluno of listaDeAlunos){
+        console.log(`Aluno: ${aluno}`)    
     }
 
-    // estrutura de repetição usando FOR IN 
-    console.log()
-    console.log('--> Exemplo com o FOR IN <--')
+    // FOR IN (percorre índices)
+    console.log('\n--> For In (índice) <--')
     
-    // pega o objeto principal e de cada item que tiver, ele retorna o número do índice do item na variável
-    for(aluno in listaDeAlunos){
-        console.log(`O nome do aluno(a) é: ${aluno}`)    
+    for(let indice in listaDeAlunos){
+        console.log(`Índice: ${indice}`)    
     }
 
-    // retorna a quantidade de itens dentro do ARRAY
+    // exibe a quantidade de itens totais no array
     console.log(listaDeAlunos.length)
 }
 
+/* -------- ACRÉSCIMO E REMOÇÃO DE DADOS EM ARRAY -------- */
+
 const manipularDados = function(){
     
-    // adicionando elementos de forma manual pelo índice
+    // adicionando manualmente por índice (pode gerar espaços vazios caso algum índice for pulado)
     listaDeClientes[0] = 'Lucas Alexandre'
     listaDeClientes[1] = 'Marcel Teixeira'
     listaDeClientes[2] = 'Yuri Komuta'
     listaDeClientes[5] = 'Celso Furtado'
 
-    console.log(listaDeClientes)
     console.table(listaDeClientes)
 
-    // para adicionar no FINAL novos elementos dentro do objeto ARRAY, usamos  o 'push' 
+    // adiciona no FINAL do array (push)
     listaDeFornecedores.push('Wendel', 'Luiz', 'Leonid')
-    listaDeFornecedores.push('Antônio')
-    listaDeFornecedores.push('Maria')
-    listaDeFornecedores.push('Caio')
+    listaDeFornecedores.push('Antônio', 'Maria', 'Caio')
 
     console.table(listaDeFornecedores)
     
-    // para ADICIONAR no COMEÇO novos elementos dentro do objeto ARRAY, usamos  o 'unshift' 
-    // após adicionar o elemento, ele reorganiza todos os outros itens
+    // adiciona no INÍCIO do array (unshift)
+    // reorganiza todos os índices automaticamente
     listaDeFornecedores.unshift('Luciano')
     console.table(listaDeFornecedores)
 
-    // para ADICIONAR em uma DETERMINADA POSIÇÃO do do objeto ARRAY, usamos  o 'splice' 
-                    //splice(índice, qtde de elementos (sempre zero), 'Novo conteúdo') 
-    listaDeFornecedores.splice(3,0,'Bernado')
+    // adiciona em posição específica (splice)
+    // splice(índice, quantidadeRemover, novoValor)
+    listaDeFornecedores.splice(3, 0, 'Bernardo')
     console.table(listaDeFornecedores)
 
-    // para REMOVER um DETERMINADO CONTEÚDO com base no índice do do objeto ARRAY, usamos  o 'splice'
-                       //splice(índice, qtde de elementos a ser removidos') 
-    listaDeFornecedores.splice(6,1)
+    // remove por índice (splice)
+    listaDeFornecedores.splice(6, 1)
     console.table(listaDeFornecedores)
 
-    // para REMOVER o ÚLTIMO conteúdo do objeto ARRAY, usamos  o 'pop'
+    // remove último elemento (pop)
     listaDeFornecedores.pop()
     console.table(listaDeFornecedores)
 
-    // para REMOVER o PRIMEIRO conteúdo do objeto ARRAY, usamos  o 'shift'
-    // após remover, ele reorganiza todos os outros itens
+    // remove primeiro elemento (shift)
     listaDeFornecedores.shift()
     console.table(listaDeFornecedores)
 }
 
+/* -------- REMOÇÃO DE ELEMENTOS DO ARRAY -------- */
 
-//exibirDados()
-//manipularDados()
-
-// função utilizando FOR IN
+// usando FOR IN (percorre índices)
 const removerAlunoForIn = function(nomeAluno){
-
-    for(indice in listaDeAlunos){
-        
+    
+    for(let indice in listaDeAlunos){
         if(listaDeAlunos[indice] == nomeAluno){
             listaDeAlunos.splice(indice, 1)
         }
     }
 }
 
-// função utilizando WHILE
+// usando WHILE
 const removerAlunoWhile = function(nomeAluno){
-
     let contadorInicial = 0
-    let qntdIndice = listaDeAlunos.length
 
-    while(contadorInicial < qntdIndice){
-
+    while(contadorInicial < listaDeAlunos.length){
         if(nomeAluno == listaDeAlunos[contadorInicial]){
             listaDeAlunos.splice(contadorInicial, 1)
         }
-
-        contadorInicial ++
+        contadorInicial++
     }
 }
 
-// função utilizando FOR
+// usando FOR
 const removerAlunoFor = function(nomeAluno){
-
-    for(let contadorInicial = 0; contadorInicial < listaDeAlunos.length; contadorInicial++){
-        
-        if(nomeAluno == listaDeAlunos[contadorInicial]){
-            listaDeAlunos.splice(contadorInicial, 1)
+   
+    for(let i = 0; i < listaDeAlunos.length; i++){
+        if(nomeAluno == listaDeAlunos[i]){
+            listaDeAlunos.splice(i, 1)
         }
     }
 }
 
-// função utilizando INDEXOF
+// usando INDEXOF (busca direta)
 const removerAlunoIndexOf = function(nomeAluno){
 
     let indice = listaDeAlunos.indexOf(nomeAluno)
-    listaDeAlunos.splice(indice, 1)
 
-    // ou //
-
-    //listaDeAlunos.splice(listaDeAlunos.indexOf(nomeAluno), 1) 
+    if(indice != -1){
+        listaDeAlunos.splice(indice, 1)
+    }
 }
 
-// função capaz de verificar se o item dentro do objeto existe ou não
+/* -------- VERIFICAÇÃO DE EXISTÊNCIA DO ELEMENTO NO ARRAY -------- */
+
 const verificarItem = function(nomeAluno){
 
-    // includes -> verifica e devolve um boleano
+    // includes -> retorna true ou false
     console.log(listaDeAlunos.includes(nomeAluno))
-
 }
 
+/* -------- MANIPULAÇÃO DE OBJETOS JSON -------- */
 
-// ---------------
-
-// função responsável por criar o objeto JSON 
 const manipularDadosJson = function(){
 
-    // criação de um objeto JSON
-    // a estrutura do JSON é a Chave (atributo): Valor(conteúdo)
+    // criação de objeto JSON (chave : valor)
     let aluno = {
-    "id": 1,
-    "ra": 123456, 
-    "nome": 'Lucas',
-    "idade": 17,
-    "email": 'lucas@gmail.com'
+        "id": 1,
+        "ra": 123456, 
+        "nome": "Lucas",
+        "idade": 17,
+        "email": "lucas@gmail.com"
     }
 
-    console.log(aluno)
     console.table(aluno)
 
-    // EXIBI o CONTEÚDO de um ATRIBUTO JSON
+    // acesso direto ao atributo
     console.log(aluno.nome)
 
-    // ADICIONA um NOVO ATRIBUTO no JSON já existente 
+    // adiciona novos atributos
     aluno.telefone = '11-123456'
     aluno.data_nascimento = '04/06/2008'
 
-    console.log(aluno)
-
-    // REMOVE um ATRIBUTO no JSON já existente 
+    // remove atributo
     delete aluno.email 
 
-    // SUBSTITUI o VALOR de um ATRIBUTO no JSON já existente
+    // altera valor existente
     aluno.ra = 123456789
 
-    // ADICIONA um NOVO ATRIBUTO sem VALOR no JSON já existente 
+    // atributo sem valor definido
     aluno.nota = null
 
-    console.log(aluno)
+    console.table(aluno)
 }
 
+/* -------- ESTRUTURA DE DADOS COMPLETA (ARRAY + JSON) -------- */
 
 const cadastroDeProdutos = function(){
     
+    // lista de cores disponíveis no sistema
     let cores = [ 
-        {"id": 1, "cor": "white","hexadecimal": "#ffff"},       // índice 0
-        {"id": 2, "cor": "black","hexadecimal": "#0000"},       // índice 1
-        {"id": 3, "cor": "blue","hexadecimal": "#0000ff"},      // índice 2
-        {"id": 4, "cor": "amarelo","hexadecimal": "#ffff00"},   // índice 3
-        {"id": 5, "cor": "rosa","hexadecimal": "#ffb5c0"}       // índice 4
+        {"id": 1, "cor": "white",   "hexadecimal": "#ffff"},
+        {"id": 2, "cor": "black",   "hexadecimal": "#0000"},
+        {"id": 3, "cor": "blue",    "hexadecimal": "#0000ff"},
+        {"id": 4, "cor": "amarelo", "hexadecimal": "#ffff00"},
+        {"id": 5, "cor": "rosa",    "hexadecimal": "#ffb5c0"}
     ]
 
+    // lista de marcas disponíveis no sistema
     let marcas = [
-        {"id": 1,"marca": "dell","telefone": "11-123456", "email": "dell@gmail.com"},                   // índice 0
-        {"id": 2,"marca": "positivo","telefone": "11-123456", "email": "positivo@gmail.com"},           // índice 1
-        {"id": 3,"marca": "multilaser","telefone": "11-123456", "email": "multilaser@gmail.com"},       // índice 2
-        {"id": 4,"marca": "nvidia","telefone": "11-123456", "email": "nvidia@gmail.com"},               // índice 3
-        {"id": 5,"marca": "apple","telefone": "11-123456", "email": "apple@gmail.com"}                  // índice 4
-
+        {"id": 1,"marca": "dell"},
+        {"id": 2,"marca": "positivo"},
+        {"id": 3,"marca": "multilaser"},
+        {"id": 4,"marca": "nvidia"},
+        {"id": 5,"marca": "apple"}
     ]
 
+    // lista de produtos disponíveis no sistema
     let produtos = [
-        {   "id": 1,
-            "nome": "Monitor", 
+        {
+            "id": 1,
+            "nome": "Monitor",
             "descricao": "Monitor de 27 Polegadas",
             "valor": 1500,
             "quantidade": 20,
-            "cor": [
-                cores[0],
-                cores[1]
-            ],
-            "marca": [
-                marcas[0]
-            ]
+            "cor":   [cores[0], cores[1]],
+            "marca": [marcas[0].marca]
         },
 
         {
             "id": 2,
-            "nome": "Teclado", 
-            "descricao": "Teclado Mecânico RBG",
+            "nome": "Teclado",
+            "descricao": "Teclado Mecânico RGB",
             "valor": 250,
             "quantidade": 500,
             "cor": cores,
-            "marca": [
-                marcas[2].marca,
-                marcas[3].marca,
-                marcas[4].marca
-            ],
+            "marca": [marcas[2].marca, marcas[3].marca, marcas[4].marca]
         },
-
+        
         {
             "id": 3,
-            "nome": "Mouse", 
+            "nome": "Mouse",
             "descricao": "Mouse sem fio",
             "valor": 80,
             "quantidade": 160,
-            "cor": [
-                cores[0],
-                cores[2],
-                cores[4]
-            ],
-            "marca": [
-                marcas[1].marca,
-                marcas[3].marca,
-                marcas[4].marca,
-               
-            ],
-        },
+            "cor":   [cores[0], cores[2], cores[4]],
+            "marca": [marcas[1].marca, marcas[3].marca, marcas[4].marca]
+        }
     ]
 
-    // extrai o produto
-produtos.forEach(function(itemProduto){
-    console.log(`Produto: ${itemProduto.nome}`)
+    // percorre os produtos
+    produtos.forEach(function(itemProduto){
         
-    // extrai a cor
-    itemProduto.cor.forEach(function(itemCor){
-        console.log(`Cor: ${itemCor.cor}`)
-    })
+        console.log('\n----------------------------')
+        
+console.log(`
+Produto:    ${itemProduto.nome}
+Valor:      ${itemProduto.valor}
+Quantidade: ${itemProduto.quantidade}
+`)
+        
+        // percorre cores do produto
+        itemProduto.cor.forEach(function(itemCor){
+            console.log(`Cor: ${itemCor.cor}`)
+        })
 
-    // extrai a marca
-    itemProduto.marca.forEach(function(itemMarca){
-        console.log(`Marca: ${itemMarca}`)
-    }) 
-
-    // extrai o valor
-    itemProduto.valor.forEach(function(itemValor){
-        console.log(`Valor: ${itemValor}`)
-    })  
-})           
-    
-
-    //console.log(produtos[0].cor)
-
-    // exibindo todas as cores referente ao produto ´monitor´
-    // produtos[0].cor.forEach(function(itemCor){
-    //     console.log(itemCor.cor)
-    // })
-
-    //console.log(produtos)
-    //console.table(produtos)
-
-    //console.log(cores)
-    //console.table(cores)
-
-    // como exibir somente um cor específica
-    // chamo a variável cores e atrevés do [], passo o índice, e após eu chamo através do . o atributo que quero 
-    
-    //console.log(cores[2].cor)
-
-    // como exibir todas as cores de uma vez
-    
-    // cores.forEach(function(todasCores){
-    //     console.log(todasCores.cor)
-    // })
-
-    // for(let contadorInicial = 0; contadorInicial < cores.length; contadorInicial++){
-    //     console.log(cores[contadorInicial].cor)
-    // }  
+        // percorre marcas do produto
+        itemProduto.marca.forEach(function(itemMarca){
+            console.log(`Marca: ${itemMarca}`)
+        }) 
+    })           
 }
 
-   
-
-
-
+// chamado de funções
 cadastroDeProdutos()
-
-
-
 
 //console.table(listaDeAlunos)
 //removerAlunoForIn('Lucas')
@@ -407,4 +329,3 @@ cadastroDeProdutos()
 //console.table(listaDeAlunos)
 //verificarItem('Banana')
 //manipularDadosJson()
-
