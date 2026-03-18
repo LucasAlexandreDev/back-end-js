@@ -297,25 +297,83 @@ const cadastroDeProdutos = function(){
     // percorre os produtos
     produtos.forEach(function(itemProduto){
         
-        console.log('\n----------------------------')
+    console.log('\n----------------------------')
         
-console.log(`
-Produto:    ${itemProduto.nome}
-Valor:      ${itemProduto.valor}
-Quantidade: ${itemProduto.quantidade}
-`)
+ console.log(`
+ Produto:    ${itemProduto.nome}
+ Valor:      ${itemProduto.valor}
+ Quantidade: ${itemProduto.quantidade}
+ `)
         
-        // percorre cores do produto
-        itemProduto.cor.forEach(function(itemCor){
-            console.log(`Cor: ${itemCor.cor}`)
-        })
+         // percorre cores do produto
+         itemProduto.cor.forEach(function(itemCor){
+             console.log(`Cor: ${itemCor.cor}`)
+         })
 
-        // percorre marcas do produto
-        itemProduto.marca.forEach(function(itemMarca){
-            console.log(`Marca: ${itemMarca}`)
-        }) 
-    })           
+         // percorre marcas do produto
+         itemProduto.marca.forEach(function(itemMarca){
+             console.log(`Marca: ${itemMarca}`)
+         }) 
+    })
+
+    // usando FOR  
+
+    // for(let i = 0; i < produtos.length; i++){
+    //     let itemProduto = produtos[i]
+    //     console.log(itemProduto.nome)
+
+    //     for(let i = 0; i < itemProduto.marca.length; i++){
+    //         nomeMarca = itemProduto.marca[i]
+    //         console.log(nomeMarca)
+    //     }
+
+    //     for(let i = 0; i < itemProduto.cor.length; i++){
+    //         nomeCor = itemProduto.cor[i].cor
+    //         console.log(nomeCor)
+    //     }
+    // }
+
+    // -------- FILTRANDO PRODUTOS PELO NOME --------
+    
+    console.log('\n Exemplo de como pesquisar um produto pelo nome')
+
+    let nomeProduto = 'Mouse'
+    produtos.forEach(function(itemProduto){
+
+        if(String(nomeProduto).toLowerCase() == String(itemProduto.nome).toLowerCase()){
+            console.log(itemProduto)
+        }
+    })
+
+    // -------- FILTRANDO PRODUTOS PELA COR --------
+
+    console.log('\n Exemplo de como pesquisar a cor do produto pelo nome')
+
+    let nomeCor = 'amarelo'
+    produtos.forEach(function(itemProduto){
+        itemProduto.cor.forEach(function(itemCor){
+            
+            if(String(nomeCor).toLowerCase() == String(itemCor.cor).toLowerCase()){
+                console.log(itemProduto)
+            }
+        })
+    })
+
+    // usando FOR   
+
+    // let nomeCor = 'amarelo'
+    //   for(let i = 0; i < produtos.length; i++){
+    //     let itemProduto = produtos[i]
+
+    //     for(let i = 0; i < itemProduto.cor.length; i++){
+            
+    //         if(nomeCor == itemProduto.cor[i].cor){
+    //             console.log(itemProduto)
+    //         }
+    //     }
+    // }
 }
+
 
 // chamado de funções
 cadastroDeProdutos()
