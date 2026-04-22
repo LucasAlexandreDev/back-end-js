@@ -8,15 +8,15 @@
 // Import das dependências para estar criando a API
 const express    = require('express')
 const cors       = require('cors')
-const boryParser = require('body-parser')
-
+const bodyParser = require('body-parser')
 
 // Import das controllers do Projeto de Filme
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
+//
 
 // Permite a utilização do JSON no body das requisições 
-const boryParserJSON = boryParser.json()
+const bodyParserJSON = bodyParser.json()
 
 
 // Criando uma instância do framework Express para criar a API
@@ -34,10 +34,14 @@ app.use(cors(corsOptions))
 
 
 //ENDPOINTS
-app.post('/v1/senai/locadora/filme', boryParserJSON, async function(request, response){
+app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request, response){
 
-    let dados  = request.body // Rebendo o body da requisição
-    let result = await controllerFilme.inserirNovoFilme(dados) //chama a função de inserir novo filme e passa os dados recebidos do bory 
+    let dados       = request.body // Rebendo o body da requisição
+    
+    // Recebendo o tipo de dados da requisição para validar se é JSON
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirNovoFilme(dados, contentType) //chama a função de inserir novo filme e passa os dados recebidos do bory
 
     response.status(result.status_code)
     response.json(result)

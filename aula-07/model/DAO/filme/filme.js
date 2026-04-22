@@ -12,46 +12,50 @@ const knex = require('knex')
 const knexDatabaseConfig = require('../../database_config/knexConfig.js')
 
 // Cria uma conecção com o Banco de Dados MySLQ, conforme o arquivo de configuração 'knexDatabaseConfig'
-const kenexConection = knex(knexDatabaseConfig.development)
+const kenexConection     = knex(knexDatabaseConfig.development)
 
 // Função responsável por Inserir um novo Filme no Banco de Dados
-const insertFilme = async function(objeticFilme){
+const insertFilme = async function(objectFilme){
 
-    let sql = `
-    insert into tbl_filme (
-        nome, 			
-        sinopse, 		
-        capa,			
-        data_lancamento, 
-        duracao,
-        valor,		
-        avaliacao
-    )values(
-        '${objeticFilme.nome}',
-        '${objeticFilme.sinopse}',
-        '${objeticFilme.capa}',
-        '${objeticFilme.data_lancamento}',
-        '${objeticFilme.duracao}',
-        '${objeticFilme.valor}',
-        '${objeticFilme.avaliacao}',
-    );`
+    try {
 
-     /* 
-        kenexConection.raw(sql) => Encaminha para o DB o ScriptSQL
-
-        await   => Serve para fazer com que o sistema 'pare' e aguarde o retorno dos dados do DB
-        async   => Serve para declarar uma função assíncrona que retorna uma promessa (Promise)
-        Promise => Serve para representar um valor futuro
-    */
-
-    let result = await kenexConection.raw(sql) 
+        let sql = ` insert into tbl_filme (
+            nome, 			
+            sinopse, 		
+            capa,			
+            data_lancamento, 
+            duracao,
+            valor,		
+            avaliacao
+        )values(
+            '${objectFilme.nome}',
+            '${objectFilme.sinopse}',
+            '${objectFilme.capa}',
+            '${objectFilme.data_lancamento}',
+            '${objectFilme.duracao}',
+            '${objectFilme.valor}',
+            if('${objectFilme.avaliacao}' = '', null, '${objectFilme.avaliacao}')
+        ); `
     
-    if(result){
-        return true
+         /* 
+            kenexConection.raw(sql) => Encaminha para o DB o ScriptSQL
     
-    }else{
+            await   => Serve para fazer com que o sistema 'pare' e aguarde o retorno dos dados do DB
+            async   => Serve para declarar uma função assíncrona que retorna uma promessa (Promise)
+            Promise => Serve para representar um valor futuro
+        */
+        let result = await kenexConection.raw(sql) 
+        
+        if(result){
+            return true
+        
+        }else{
+            return false
+        }
+
+    } catch (error) {
         return false
-    }
+    } 
 }
 
 
