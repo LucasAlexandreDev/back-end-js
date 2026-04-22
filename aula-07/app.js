@@ -36,7 +36,7 @@ app.use(cors(corsOptions))
 //ENDPOINTS
 app.post('/v1/senai/locadora/filme', boryParserJSON, async function(request, response){
 
-    let dados  = request.boryParserJSON // Rebendo o body da requisição
+    let dados  = request.body // Rebendo o body da requisição
     let result = await controllerFilme.inserirNovoFilme(dados) //chama a função de inserir novo filme e passa os dados recebidos do bory 
 
     response.status(result.status_code)

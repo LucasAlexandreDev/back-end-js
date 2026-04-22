@@ -27,30 +27,31 @@ const inserirNovoFilme = async function(objeticFilme){
 
     if(objeticFilme.nome == '' || objeticFilme.nome == null || objeticFilme.nome == undefined || objeticFilme.nome.length > 80){
         customMessage.ERROR_400_BAD_REQUEST.field = '[NOME] INVÁLIDO' // field (campo)
-
+        return customMessage.ERROR_400_BAD_REQUEST
 
     }else if(objeticFilme.sinopse == '' || objeticFilme.sinopse == null || objeticFilme.sinopse == undefined){
         customMessage.ERROR_400_BAD_REQUEST.field = '[SINOPSE] INVÁLIDO'
+        return customMessage.ERROR_400_BAD_REQUEST
 
-    
     }else if(objeticFilme.capa == '' || objeticFilme.capa == null || objeticFilme.capa == undefined || objeticFilme.capa.length > 255){
         customMessage.ERROR_400_BAD_REQUEST.field = '[CAPA] INVÁLIDO'
-
+        return customMessage.ERROR_400_BAD_REQUEST
     
     }else if(objeticFilme.data_lancamento == '' || objeticFilme.data_lancamento == null || objeticFilme.data_lancamento == undefined || objeticFilme.data_lancamento.length != 10){
         customMessage.ERROR_400_BAD_REQUEST.field = '[DATA LANÇAMENTO] INVÁLIDO'
-
+        return customMessage.ERROR_400_BAD_REQUEST
     
     }else if(objeticFilme.duracao == '' || objeticFilme.duracao == null || objeticFilme.duracao == undefined || objeticFilme.duracao.length < 5){
         customMessage.ERROR_400_BAD_REQUEST.field = '[DURAÇÃO] INVÁLIDO'
-
+        return customMessage.ERROR_400_BAD_REQUEST
     
     }else if(objeticFilme.valor == undefined || isNaN(objeticFilme.valor) || objeticFilme.valor.length > 5){
         customMessage.ERROR_400_BAD_REQUEST.field = '[VALOR] INVÁLIDO'
-
+        return customMessage.ERROR_400_BAD_REQUEST
     
     }else if(objeticFilme.avaliacao == undefined || isNaN(objeticFilme.avaliacao) || objeticFilme.avaliacao.length > 3){
         customMessage.ERROR_400_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDO'
+        return customMessage.ERROR_400_BAD_REQUEST
 
     }else{
 
@@ -67,9 +68,9 @@ const inserirNovoFilme = async function(objeticFilme){
             customMessage.DEFAULT_MESSAGE.status_code = customMessage.EROR_500_INTERNAL_SERVER_MODEL.status_code
             customMessage.DEFAULT_MESSAGE.message     = customMessage.EROR_500_INTERNAL_SERVER_MODEL.message
         }
-
-        return customMessage.DEFAULT_MESSAGE
     }
+
+    return customMessage.DEFAULT_MESSAGE
 }
 
 
