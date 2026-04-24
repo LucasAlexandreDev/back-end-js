@@ -49,4 +49,14 @@ insert into tbl_filme (
 );
 
 ## Permite Visualizar os conteúdos dentro da tabela
-select * from tbl_filme;
+## select * from tbl_filme;
+
+## Permite inverter a ordem dos conteúdos dentro da tabela | o último passa a ser o primeiro | método get - all
+select * from tbl_filme order by id desc;
+
+## Permite localizar os dados pelo id
+select * from tbl_filme where id = 38;
+
+## Permite remover todos os dados onde o id é maior que 0  
+delete from tbl_filme where id > 0;
+

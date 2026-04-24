@@ -10,6 +10,7 @@ const knex = require('knex')
 
 // Import do arquivo 'knexConfig.js' de configuração para acesso ao DB
 const knexDatabaseConfig = require('../../database_config/knexConfig.js')
+const { json } = require('express')
 
 // Cria uma conecção com o Banco de Dados MySLQ, conforme o arquivo de configuração 'knexDatabaseConfig'
 const kenexConection     = knex(knexDatabaseConfig.development)
@@ -68,12 +69,50 @@ const updateFilme = async function(objeticFilme){
 // Função responsável por Retornar todos os dados de Filme do Banco de Dados
 const selectAllFilme = async function(){
 
+    try {
+        
+        // Script SQL para listar todos os filmes
+        let sql    = 'select * from tbl_filme order by id desc'
+        
+        /* 
+            Execulta no DB o scrpit e guarda o retorno do DB
+            Pode ser um ERRO (false) ou um ARRAY com os dados
+        */
+        let result = await kenexConection.raw(sql)
+
+        // Array.isArray -> Validação para verificar se o retorno do DB é um ARRAY ou Boolean (false)
+        if(Array.isArray(result)){
+            return result[0] // Retornar somente o índice com a lista de filmes
+
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
 }
 
 
 // Função responsável por Retornar um Filme | filtro = ID
 const selectByIdfilme = async function(id){
 
+    try {
+        
+        let sql    = `select * from tbl_filme where id=${id}`
+
+        let result = await kenexConection.raw(sql)
+        
+        if(Array.isArray(result)){
+            return result[0]
+        
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
 }
 
 

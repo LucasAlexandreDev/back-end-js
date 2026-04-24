@@ -47,7 +47,7 @@ const inserirNovoFilme = async function(objectFilme, contentType){
                     return customMessage.DEFAULT_MESSAGE // 201
         
                 }else{ // 500 (error interno do servidor)
-                    return customMessage.EROR_500_INTERNAL_SERVER_MODEL // 500 (model)
+                    return customMessage.ERROR_500_INTERNAL_SERVER_MODEL // 500 (model - DAO)
                 }
             }
         
@@ -56,7 +56,7 @@ const inserirNovoFilme = async function(objectFilme, contentType){
         }
 
     } catch (error) {
-        return customMessage.EROR_500_INTERNAL_SERVER_CONTROLLER // 500 (controller)
+        return customMessage.ERROR_500_INTERNAL_SERVER_CONTROLLER // 500 (controller)
     }
 }
 
@@ -70,12 +70,85 @@ const atualizarFilme = async function(){
 // Função responsável por retornar todos os filmes existentes
 const listarFilme = async function(){
 
+    let customMessage = JSON.parse(JSON.stringify(configMessages))   
+
+    // Verifica se dentro do arquivo controller possui algum bug de digitação | erro (500 controller)
+    try {
+
+        // Chama a função do DAO para retornar a lista de filmes do DB
+        let result = await filmeDAO.selectAllFilme()
+
+        // Validação para verificar se o DAO conseguiu processar o scrpit no DB | return false -> erro (500 model)
+        if(result){
+
+            // Validação para verificar se o conteúdo do ARRAY possui dados de retorno | return false -> erro (404)
+            if(result.length > 0){        
+                customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_200_RESPONSE.status
+                customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_200_RESPONSE.status_code
+                customMessage.DEFAULT_MESSAGE.response.count = result.length
+                customMessage.DEFAULT_MESSAGE.response.filme = result
+
+                return customMessage.DEFAULT_MESSAGE // 200
+            
+            }else{
+                return customMessage.ERROR_404_NOT_FOUND // 404
+            }
+        
+        }else{
+            return customMessage.ERROR_500_INTERNAL_SERVER_MODEL // 500 (model - DAO)
+        }
+
+
+    } catch (error) {
+        return customMessage.ERROR_500_INTERNAL_SERVER_CONTROLLER // 500 (controller)
+    }
 }
 
 
 // Função responsável para retornar um filme | Filtro = ID
-const buscarFilme = async function(){
+const buscarFilme = async function(id){    
+    
+    let customMessage = JSON.parse(JSON.stringify(configMessages))   
 
+    // Verifica se dentro do arquivo controller possui algum bug de digitação | erro (500 controller)
+    try {
+  
+        // validação para garantir que o ID seja um número válido 
+        //
+        if(String(id).replaceAll(' ', '') == '' || id == null || id == undefined || isNaN(id)){
+            customMessage.ERROR_400_BAD_REQUEST.field = '[ID] INVÁLIDO'
+            return customMessage.ERROR_400_BAD_REQUEST
+
+            }else{
+
+                // Chama a função do DAO para buscar o filme pelo ID
+                let result = await filmeDAO.selectByIdfilme(id)
+
+                // Validação para verificar se o DAO retornou dados | false -> erro 500 (model)
+                if(result){
+
+                    // Validação para veficiar se o DAO possui algum dado dentro do ARRAY | false -> erro 404 (dado não encontrado)
+                    if(result.length > 0){
+
+                        customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_200_RESPONSE.status
+                        customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_200_RESPONSE.status_code
+                        customMessage.DEFAULT_MESSAGE.response.filme = result
+
+                        return customMessage.DEFAULT_MESSAGE // 200
+
+                    }else{
+                        return customMessage.ERROR_404_NOT_FOUND // 404 
+                    }
+
+                }else{
+                    return customMessage.ERROR_500_INTERNAL_SERVER_MODEL // 500 (model - DAO)
+                }
+            }
+
+    } catch (error) {
+        return customMessage.ERROR_500_INTERNAL_SERVER_CONTROLLER // 500 (controller)
+    }
+        
 }
 
 
@@ -132,7 +205,6 @@ const validarDados = async function(objectFilme){
     }
 }
 
-
 module.exports = {
     inserirNovoFilme,
     atualizarFilme,
@@ -140,3 +212,5 @@ module.exports = {
     buscarFilme,
     excluirFilme
 }
+
+listarFilme()

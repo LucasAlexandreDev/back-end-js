@@ -33,7 +33,12 @@ const corsOptions =
 app.use(cors(corsOptions))
 
 
-//ENDPOINTS
+//ENDPOINTS:
+
+/*
+    Endpoint 1 - Adiciona cadastro de um novo filme
+    Método: POST 
+*/
 app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request, response){
 
     let dados       = request.body // Rebendo o body da requisição
@@ -42,6 +47,25 @@ app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request, res
     let contentType = request.headers['content-type']
 
     let result = await controllerFilme.inserirNovoFilme(dados, contentType) //chama a função de inserir novo filme e passa os dados recebidos do bory
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+app.get('/v1/senai/locadora/filme', async function(request, response){
+
+    let result = await controllerFilme.listarFilme()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+app.get('/v1/senai/locadora/filme/:id', async function(request, response){
+
+    let numberID = request.params.id
+    let result   = await controllerFilme.buscarFilme(numberID)
 
     response.status(result.status_code)
     response.json(result)
