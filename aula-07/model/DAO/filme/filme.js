@@ -63,6 +63,31 @@ const insertFilme = async function(objectFilme){
 // Função responsável para Atualizar um Filme existente no Banco de Dados
 const updateFilme = async function(objeticFilme){
 
+    try {
+        
+        let slq = `
+            update tbl_filme set
+                nome            = '${objeticFilme.nome}',
+                sinopse         = '${objeticFilme.sinopse}',
+                capa            = '${objeticFilme.capa}',
+                data_lancamento = '${objeticFilme.data_lancamento}',
+                duracao         = '${objeticFilme.duracao}',
+                valor           = '${objeticFilme.valor}',
+                avaliacao       = if('${objeticFilme.avaliacao}' = '', null, '${objeticFilme.avaliacao}')
+	        where id            =  ${objeticFilme.id}`
+
+        let result = await kenexConection.raw(slq)
+
+        if(result){
+            return true
+        
+        }else{
+            return false
+        }
+    
+    } catch (error) {
+        return false
+    }
 }
 
 
@@ -119,6 +144,22 @@ const selectByIdfilme = async function(id){
 // Função responsável por Excluir um Filme | filtro = ID
 const deleteFilme = async function(id){
 
+    try {
+        
+        let slq = `delete from tbl_filme where id = ${id};`
+
+        let result = await kenexConection.raw(slq)
+
+        if(result){
+            return true
+        
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
 }
 
 module.exports = {

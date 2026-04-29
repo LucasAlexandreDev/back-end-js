@@ -49,7 +49,7 @@ insert into tbl_filme (
 );
 
 ## Permite Visualizar os conteúdos dentro da tabela
-## select * from tbl_filme;
+select * from tbl_filme;
 
 ## Permite inverter a ordem dos conteúdos dentro da tabela | o último passa a ser o primeiro | método get - all
 select * from tbl_filme order by id desc;
@@ -60,3 +60,24 @@ select * from tbl_filme where id = 38;
 ## Permite remover todos os dados onde o id é maior que 0  
 delete from tbl_filme where id > 0;
 
+## Permite fazer alterações de um dado já cadastrado na tabela | especificar qual ID com o (where)
+update tbl_filme set 
+	nome = 'Filme 01 - Teste de Atualização'
+	where  id = 40;
+    
+## Permite ser realizado mais de uma altereação de um campo | utilizando a (,)
+##update tbl_filme set
+	##nome = 'Filme 02',
+    ##sinopse = ' Teste de Atualização'
+##where id = 40
+
+## Permite atualizar todos os dados registrado na tabela | esse modelo é o utilizado para atualizar os dados
+update tbl_filme set
+	nome = 'Filme 02',
+    sinopse = ' Teste de Atualização',
+    capa = 'teste',
+    data_lancamento = '2026-04-29',
+    duracao = '01:39:00',
+    valor = '10',
+    avaliacao = '2'
+where id = 39;

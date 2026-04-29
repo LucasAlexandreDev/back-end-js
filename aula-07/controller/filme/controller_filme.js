@@ -62,8 +62,58 @@ const inserirNovoFilme = async function(objectFilme, contentType){
 
 
 // Função responsável para atualizar um filme existente
-const atualizarFilme = async function(){
+const atualizarFilme = async function(objectFilme, id, contentType){
 
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+
+        // Validação para verificar se o conteúdo fo Body é um JSON
+        if(String(contentType).trim().toLocaleLowerCase() == 'application/json'){
+
+            // Chama a função para buscar o filme e validar se o ID está correto | Se o ID existe no DB | Se o filme existe 
+            let resultBuscarFilme = await buscarFilme(id)
+
+            if(resultBuscarFilme.status){
+                
+                // Chama a função para validar os dados do body (JSON) da requisição para alteração do filme
+                let validar = await validarDados(objectFilme)
+
+                if(!validar){
+
+                    // Adiciona um atributo ID no JSON de filme, para enviar ao DAO um único objeto
+                    objectFilme.id = Number(id)
+
+                    // Chama a função para atualizar o filme no DB
+                    let result = filmeDAO.updateFilme(objectFilme)
+                    
+                    // Se o DAO me retornou um true, eu conseguir atualizar no DB e fazemos um 200 dentro de if(result) | Se o DAO me retornou um false, entra no else (com erro 500 na model - DAO) 
+                    if(result){ 
+                        customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCESS_200_UPDATED_ITEM.status
+                        customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCESS_200_UPDATED_ITEM.status_code
+                        customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCESS_200_UPDATED_ITEM.message
+
+                        return customMessage.DEFAULT_MESSAGE // 200 (item atualizado com sucesso)
+
+                    }else{
+                        return customMessage.ERROR_500_INTERNAL_SERVER_MODEL // 500 (model - DAO)
+                    }
+
+                }else{
+                    return validar // 400 de validação dos campos do DB
+                }
+
+            }else{
+                return resultBuscarFilme // 400 (ID inválido), 404 (Não encontrado) ou 500 (Controller ou Model - DAO)
+            }
+        
+        }else{
+            return configMessages.ERROR_415_CONTENT_TYPE // 415 (tipo de dados inválido)
+        }
+
+    } catch (error) {
+        return configMessages.ERROR_500_INTERNAL_SERVER_CONTROLLER // 500 (controller) - Erro de Sintaxe
+    }
 }
 
 
@@ -115,7 +165,7 @@ const buscarFilme = async function(id){
   
         // validação para garantir que o ID seja um número válido 
         //
-        if(String(id).replaceAll(' ', '') == '' || id == null || id == undefined || isNaN(id)){
+        if(id == undefined || String(id).replaceAll(' ', '') == '' || id == null || isNaN(id) || id <= 0){
             customMessage.ERROR_400_BAD_REQUEST.field = '[ID] INVÁLIDO'
             return customMessage.ERROR_400_BAD_REQUEST
 
@@ -153,8 +203,38 @@ const buscarFilme = async function(id){
 
 
 // Função responsável para excluir um filme
-const excluirFilme = async function(){
+const excluirFilme = async function(id){
 
+    let customMessage = JSON.parse(JSON.stringify(configMessages))   
+
+    try {
+        
+        // Chama a função de buscar filme para validar se o id é válido ou se não foi encontrado
+        let resultBuscarFilme = await buscarFilme(id)
+
+        if(resultBuscarFilme.status){
+
+            // Chama a função do DAO do delete e passa o id
+            let result = filmeDAO.deleteFilme(id)
+
+            if(result){
+                
+                customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_204_DELETE_ITEM.status
+                customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_204_DELETE_ITEM.status_code
+
+                return customMessage.DEFAULT_MESSAGE // 204
+            
+            }else{
+                return customMessage.ERROR_500_INTERNAL_SERVER_MODEL // 500 (model)
+            }
+    
+        }else{
+            return resultBuscarFilme // 400 (ID inválido) e 404 (ID não encontrado)
+        }
+
+    } catch (error) {
+        return customMessage.ERROR_500_INTERNAL_SERVER_CONTROLLER // 500 (controller)
+    }
 }
 
 
@@ -172,23 +252,23 @@ const validarDados = async function(objectFilme){
     */
     let customMessage = JSON.parse(JSON.stringify(configMessages))    
 
-    if(objectFilme.nome == '' || objectFilme.nome == null || objectFilme.nome == undefined || objectFilme.nome.length > 80){
+    if(objectFilme.nome == undefined || objectFilme.nome == '' || objectFilme.nome == null || objectFilme.nome.length > 80){
         customMessage.ERROR_400_BAD_REQUEST.field = '[NOME] INVÁLIDO' // field (campo)
         return customMessage.ERROR_400_BAD_REQUEST
 
-    }else if(objectFilme.sinopse == '' || objectFilme.sinopse == null || objectFilme.sinopse == undefined){
+    }else if(objectFilme.sinopse == undefined || objectFilme.sinopse == '' || objectFilme.sinopse == null){
         customMessage.ERROR_400_BAD_REQUEST.field = '[SINOPSE] INVÁLIDO'
         return customMessage.ERROR_400_BAD_REQUEST
 
-    }else if(objectFilme.capa == '' || objectFilme.capa == null || objectFilme.capa == undefined || objectFilme.capa.length > 255){
+    }else if(objectFilme.capa == undefined || objectFilme.capa == '' || objectFilme.capa == null || objectFilme.capa.length > 255){
         customMessage.ERROR_400_BAD_REQUEST.field = '[CAPA] INVÁLIDO'
         return customMessage.ERROR_400_BAD_REQUEST
     
-    }else if(objectFilme.data_lancamento == '' || objectFilme.data_lancamento == null || objectFilme.data_lancamento == undefined || objectFilme.data_lancamento.length != 10){
+    }else if(objectFilme.data_lancamento == undefined || objectFilme.data_lancamento == '' || objectFilme.data_lancamento == null || objectFilme.data_lancamento.length != 10){
         customMessage.ERROR_400_BAD_REQUEST.field = '[DATA LANÇAMENTO] INVÁLIDO'
         return customMessage.ERROR_400_BAD_REQUEST
     
-    }else if(objectFilme.duracao == '' || objectFilme.duracao == null || objectFilme.duracao == undefined || objectFilme.duracao.length < 5){
+    }else if(objectFilme.duracao == undefined || objectFilme.duracao == '' || objectFilme.duracao == null || objectFilme.duracao.length < 5){
         customMessage.ERROR_400_BAD_REQUEST.field = '[DURAÇÃO] INVÁLIDO'
         return customMessage.ERROR_400_BAD_REQUEST
     

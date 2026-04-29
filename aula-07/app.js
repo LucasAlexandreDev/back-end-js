@@ -53,6 +53,10 @@ app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request, res
 })
 
 
+/*
+    Endpoint 2 - Retorna todos os filmes cadastrados
+    Método: GET 
+*/
 app.get('/v1/senai/locadora/filme', async function(request, response){
 
     let result = await controllerFilme.listarFilme()
@@ -62,10 +66,42 @@ app.get('/v1/senai/locadora/filme', async function(request, response){
 })
 
 
+/*
+    Endpoint 3 - Retorna o filme usando filtro: ID
+    Método: GET 
+*/
 app.get('/v1/senai/locadora/filme/:id', async function(request, response){
 
     let numberID = request.params.id
     let result   = await controllerFilme.buscarFilme(numberID)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/filme/:id', bodyParserJSON, async function(request, response){
+    
+    // Recebe o content-type da requisição, para validar se é um JSON
+    let numberID    = request.params.id
+
+    // Recebe o ID do registro a ser atualizado
+    let contentType = request.headers['content-type'] 
+
+    // Recebe os dados do body, que serão modificados no BD 
+    let dados       = request.body
+
+    // Chama a função para atualizar o filme | devemos encaminhar as 3 variáveis na mesma sequência (no parâmetro) que a função foi criada na controller
+    let result      = await controllerFilme.atualizarFilme(dados, numberID, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+app.delete('/v1/senai/locadora/filme/:id', async function(request, response) {
+    
+    let numberID = request.params.id
+    let result   = await controllerFilme.excluirFilme(numberID)
 
     response.status(result.status_code)
     response.json(result)

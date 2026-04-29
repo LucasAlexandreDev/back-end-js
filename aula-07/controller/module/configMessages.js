@@ -31,9 +31,13 @@ const ERROR_500_INTERNAL_SERVER_CONTROLLER = {status: false, status_code: 500, m
 
 // -------------- | VARIÁVEIS HTTP DE STATUS SUCESS | -------------- 
 
-const SUCESS_201_CREAT_ITEM               = {status: true, status_code: 201, message: 'item novo inserido com sucesso!'}
+const SUCESS_201_CREAT_ITEM                = {status: true, status_code: 201, message: 'item novo inserido com sucesso!'}
 
-const SUCESS_200_RESPONSE                 = {status: true, status_code: 200}
+const SUCESS_200_RESPONSE                  = {status: true, status_code: 200}
+
+const SUCESS_200_UPDATED_ITEM              = {status: true, status_code: 200, message: 'item atualizado sucesso!'} 
+
+const SUCESS_204_DELETE_ITEM               = {status: true, status_code: 204} 
 
 
 module.exports = {
@@ -44,5 +48,7 @@ module.exports = {
     ERROR_500_INTERNAL_SERVER_MODEL,
     ERROR_500_INTERNAL_SERVER_CONTROLLER,
     SUCESS_200_RESPONSE,
+    SUCESS_200_UPDATED_ITEM,
     SUCESS_201_CREAT_ITEM,
+    SUCESS_204_DELETE_ITEM
 }
