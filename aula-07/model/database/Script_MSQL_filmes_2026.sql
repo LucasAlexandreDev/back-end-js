@@ -57,6 +57,9 @@ select * from tbl_filme order by id desc;
 ## Permite localizar os dados pelo id
 select * from tbl_filme where id = 38;
 
+## Permite remover todos os dados do id específico 
+delete from tbl_filme where id = 39;
+
 ## Permite remover todos os dados onde o id é maior que 0  
 delete from tbl_filme where id > 0;
 

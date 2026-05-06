@@ -212,6 +212,7 @@ const excluirFilme = async function(id){
         // Chama a função de buscar filme para validar se o id é válido ou se não foi encontrado
         let resultBuscarFilme = await buscarFilme(id)
 
+        // Validação 
         if(resultBuscarFilme.status){
 
             // Chama a função do DAO do delete e passa o id
@@ -219,10 +220,17 @@ const excluirFilme = async function(id){
 
             if(result){
                 
+                /*
+
+                Contexto: Utilizado na aula o status code de 200, envés de 204 | ambos corretos, apenas para manter o padrão do projeto, vamos utilizar o 200
+
                 customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_204_DELETE_ITEM.status
                 customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_204_DELETE_ITEM.status_code
 
                 return customMessage.DEFAULT_MESSAGE // 204
+                */
+                
+                return customMessage.SUCESS_200_DELETE_ITEM
             
             }else{
                 return customMessage.ERROR_500_INTERNAL_SERVER_MODEL // 500 (model)

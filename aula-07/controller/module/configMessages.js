@@ -35,9 +35,11 @@ const SUCESS_201_CREAT_ITEM                = {status: true, status_code: 201, me
 
 const SUCESS_200_RESPONSE                  = {status: true, status_code: 200}
 
-const SUCESS_200_UPDATED_ITEM              = {status: true, status_code: 200, message: 'item atualizado sucesso!'} 
+const SUCESS_200_UPDATED_ITEM              = {status: true, status_code: 200, message: 'item atualizado com sucesso!'} 
 
-const SUCESS_204_DELETE_ITEM               = {status: true, status_code: 204} 
+//const SUCESS_204_DELETE_ITEM               = {status: true, status_code: 204} 
+
+const SUCESS_200_DELETE_ITEM               = {status: true, status_code: 200, message: 'item deletado com sucesso!'} 
 
 
 module.exports = {
@@ -50,5 +52,6 @@ module.exports = {
     SUCESS_200_RESPONSE,
     SUCESS_200_UPDATED_ITEM,
     SUCESS_201_CREAT_ITEM,
-    SUCESS_204_DELETE_ITEM
+    //SUCESS_204_DELETE_ITEM
+    SUCESS_200_DELETE_ITEM
 }
