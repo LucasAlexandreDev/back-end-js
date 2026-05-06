@@ -39,10 +39,14 @@ const inserirNovoFilme = async function(objectFilme, contentType){
                 let result = await filmeDAO.insertFilme(objectFilme)
                 
                 if(result){ // 201 (item inserido com sucesso)
-        
+                    
+                    // Cria o Id no JSON do objetic Filme e adiciona o ID gerado no DAO
+                    objectFilme.id = result 
+
                     customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCESS_201_CREAT_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCESS_201_CREAT_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCESS_201_CREAT_ITEM.message
+                    customMessage.DEFAULT_MESSAGE.response    = objectFilme
         
                     return customMessage.DEFAULT_MESSAGE // 201
         
@@ -92,6 +96,7 @@ const atualizarFilme = async function(objectFilme, id, contentType){
                         customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCESS_200_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCESS_200_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCESS_200_UPDATED_ITEM.message
+                        customMessage.DEFAULT_MESSAGE.response    = objectFilme // adiciona dentro do response o object filme (dados + ID)
 
                         return customMessage.DEFAULT_MESSAGE // 200 (item atualizado com sucesso)
 

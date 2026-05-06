@@ -10,7 +10,6 @@ const knex = require('knex')
 
 // Import do arquivo 'knexConfig.js' de configuração para acesso ao DB
 const knexDatabaseConfig = require('../../database_config/knexConfig.js')
-const { json } = require('express')
 
 // Cria uma conecção com o Banco de Dados MySLQ, conforme o arquivo de configuração 'knexDatabaseConfig'
 const kenexConection     = knex(knexDatabaseConfig.development)
@@ -48,7 +47,7 @@ const insertFilme = async function(objectFilme){
         let result = await kenexConection.raw(sql) 
         
         if(result){
-            return true
+            return result[0].insertId // Retorna o ID gerado pelo Insert
         
         }else{
             return false
