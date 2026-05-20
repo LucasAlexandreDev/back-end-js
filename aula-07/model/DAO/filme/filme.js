@@ -27,6 +27,7 @@ const insertFilme = async function(objectFilme){
             duracao,
             valor,		
             avaliacao
+            id_classificacao
         )values(
             '${objectFilme.nome}',
             '${objectFilme.sinopse}',
@@ -34,7 +35,8 @@ const insertFilme = async function(objectFilme){
             '${objectFilme.data_lancamento}',
             '${objectFilme.duracao}',
             '${objectFilme.valor}',
-            if('${objectFilme.avaliacao}' = '', null, '${objectFilme.avaliacao}')
+            if('${objectFilme.avaliacao}' = '', null, '${objectFilme.avaliacao}'),
+            ${objectFilme.id_classificacao} 
         ); `
     
          /* 
@@ -66,14 +68,15 @@ const updateFilme = async function(objeticFilme){
         
         let slq = `
             update tbl_filme set
-                nome            = '${objeticFilme.nome}',
-                sinopse         = '${objeticFilme.sinopse}',
-                capa            = '${objeticFilme.capa}',
-                data_lancamento = '${objeticFilme.data_lancamento}',
-                duracao         = '${objeticFilme.duracao}',
-                valor           = '${objeticFilme.valor}',
-                avaliacao       = if('${objeticFilme.avaliacao}' = '', null, '${objeticFilme.avaliacao}')
-	        where id            =  ${objeticFilme.id}`
+                nome             = s'${objeticFilme.nome}',
+                sinopse          = '${objeticFilme.sinopse}',
+                capa             = '${objeticFilme.capa}',
+                data_lancamento  = '${objeticFilme.data_lancamento}',
+                duracao          = '${objeticFilme.duracao}',
+                valor            = '${objeticFilme.valor}',
+                avaliacao        = if('${objeticFilme.avaliacao}' = '', null, '${objeticFilme.avaliacao}')
+                id_classificacao = ${objeticFilme.id_classificacao} 
+	        where id             = ${objeticFilme.id}`
 
         let result = await kenexConection.raw(slq)
 

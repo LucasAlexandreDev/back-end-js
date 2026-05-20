@@ -13,7 +13,12 @@ const configMessages = require('../module/configMessages.js')
     
 // Import do arquivo 'filme.js' do DAO para manipular os dados de filme no DB
 const filmeDAO       = require('../../model/DAO/filme/filme.js') 
-    
+
+
+// -------------- | IMPORTS FROM THE CONTROLLERS | -------------- 
+
+const controllerClassificacao = require('../classificacao_teste/controller_classificacao_teste.js')
+
 
 // -------------- | FUNCTIONS OF CRUD | -------------- 
 
@@ -34,9 +39,9 @@ const inserirNovoFilme = async function(objectFilme, contentType){
                 return validar // error 400
             
             }else{
-            
+                
                 // Encaminha os dados (JSON) do Filme para o DAO inserir no DB
-                let result = await filmeDAO.insertFilme(objectFilme)
+                let result = await filmeDAO.insertFilme(await tratarDados(objectFilme))
                 
                 if(result){ // 201 (item inserido com sucesso)
                     
@@ -89,7 +94,7 @@ const atualizarFilme = async function(objectFilme, id, contentType){
                     objectFilme.id = Number(id)
 
                     // Chama a função para atualizar o filme no DB
-                    let result = filmeDAO.updateFilme(objectFilme)
+                    let result = filmeDAO.updateFilme(await tratarDados(objectFilme))
                     
                     // Se o DAO me retornou um true, eu conseguir atualizar no DB e fazemos um 200 dentro de if(result) | Se o DAO me retornou um false, entra no else (com erro 500 na model - DAO) 
                     if(result){ 
@@ -138,6 +143,34 @@ const listarFilme = async function(){
 
             // Validação para verificar se o conteúdo do ARRAY possui dados de retorno | return false -> erro (404)
             if(result.length > 0){        
+
+                /*
+                    Manipulação dos dados da tbl 'Classificação' | Código base para ser aplicado em relacionamneto de 1:N
+                
+                    Para cada repetição percorrida no 'result' vai ser atribuido na variável filme
+                    Percorre o ARRAY de Filmes
+                */
+                for(filme of result){
+
+                    /*
+                        Chama a função dentro da controller de classificacao
+                        Passa o id_classificacao ID referente a FK de classificacao
+                        A function 'buscarClassificacao' vai retornar um JSON referente aquele ID (FK) de classificacao
+                    
+                    */
+                    let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+
+                    // Se o status_code for true do retorno da function 'buscarClassificacao' | Se encontrar o ID
+                    if(resultClassificacao.status){ 
+
+                        // Adiciona um atributo de classificação no JSON de filme e colocar o resuktado com os dados da classificação
+                        filme.classificacao = resultClassificacao.response.classificacao
+                        
+                        // Remove o atributo de 'id_classificacao' do JSON de filme
+                        delete filme.id_classificacao 
+                    }
+                }
+
                 customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_200_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_200_RESPONSE.status_code
                 customMessage.DEFAULT_MESSAGE.response.count = result.length
@@ -185,6 +218,33 @@ const buscarFilme = async function(id){
                     // Validação para veficiar se o DAO possui algum dado dentro do ARRAY | false -> erro 404 (dado não encontrado)
                     if(result.length > 0){
 
+                        /*
+                            Manipulação dos dados da tbl 'Classificação' | Código base para ser aplicado em relacionamneto de 1:N
+                        
+                            Para cada repetição percorrida no 'result' vai ser atribuido na variável filme
+                            Percorre o ARRAY de Filmes
+                        */
+                        for(filme of result){
+
+                            /*
+                                Chama a função dentro da controller de classificacao
+                                Passa o id_classificacao ID referente a FK de classificacao
+                                A function 'buscarClassificacao' vai retornar um JSON referente aquele ID (FK) de classificacao
+                            
+                            */
+                            let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+
+                            // Se o status_code for true do retorno da function 'buscarClassificacao' | Se encontrar o ID
+                            if(resultClassificacao.status){ 
+
+                                // Adiciona um atributo de classificação no JSON de filme e colocar o resuktado com os dados da classificação
+                                filme.classificacao = resultClassificacao.response.classificacao
+                                
+                                // Remove o atributo de 'id_classificacao' do JSON de filme
+                                delete filme.id_classificacao 
+                            }
+                        }
+                        
                         customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_200_RESPONSE.status
                         customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_200_RESPONSE.status_code
                         customMessage.DEFAULT_MESSAGE.response.filme = result
@@ -292,10 +352,33 @@ const validarDados = async function(objectFilme){
     }else if(objectFilme.avaliacao == undefined || isNaN(objectFilme.avaliacao) || objectFilme.avaliacao.length > 3){
         customMessage.ERROR_400_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDO'
         return customMessage.ERROR_400_BAD_REQUEST
-    
+
+    /*
+        Integração de um relacionamento 1:N (TABELA DE FILME X CLASSIFICAÇÃO)
+        Validação para a FK de classificação
+    */
+    }else if(objectFilme.id_classificacao == undefined || objectFilme.id_classificacao == null || objectFilme.id_classificacao == '' || isNaN(objectFilme.id_classificacao) || objectFilme.id_classificacao <= 0){
+        customMessage.ERROR_400_BAD_REQUEST.field = '[ID_CLASSIFICAÇÃO] INVÁLIDO'
+        return customMessage.ERROR_400_BAD_REQUEST
     }else{
         return false
     }
+}
+
+
+// Função para tratar os dados a serem inseridos
+const tratarDados = async function(objectFilme){
+
+    // Tratamento para eliminar a chegada das (') como caracter inválido
+     objectFilme.nome            = objectFilme.nome.replaceAll("'","")
+     objectFilme.sinopse         = objectFilme.sinopse.replaceAll("'","")
+     objectFilme.capa            = objectFilme.capa.replaceAll("'","")
+     objectFilme.data_lancamento = objectFilme.data_lancamento.replaceAll("'","")
+     objectFilme.duracao         = objectFilme.duracao.replaceAll("'","")
+     objectFilme.valor           = objectFilme.valor.replaceAll("'","")
+     objectFilme.avaliacao       = objectFilme.avaliacao.replaceAll("'","")
+
+    return objectFilme
 }
 
 module.exports = {
