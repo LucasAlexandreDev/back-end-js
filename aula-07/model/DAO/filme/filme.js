@@ -27,7 +27,6 @@ const insertFilme = async function(objectFilme){
             duracao,
             valor,		
             avaliacao
-            id_classificacao
         )values(
             '${objectFilme.nome}',
             '${objectFilme.sinopse}',
@@ -35,10 +34,13 @@ const insertFilme = async function(objectFilme){
             '${objectFilme.data_lancamento}',
             '${objectFilme.duracao}',
             '${objectFilme.valor}',
-            if('${objectFilme.avaliacao}' = '', null, '${objectFilme.avaliacao}'),
-            ${objectFilme.id_classificacao} 
-        ); `
+            if('${objectFilme.avaliacao}' = '', null, '${objectFilme.avaliacao}')
+        );`
+        
+        // id_classificacao
+        // ${objectFilme.id_classificacao} 
     
+
          /* 
             kenexConection.raw(sql) => Encaminha para o DB o ScriptSQL
     
@@ -56,7 +58,7 @@ const insertFilme = async function(objectFilme){
         }
 
     } catch (error) {
-        return false
+        console.log(error)
     } 
 }
 
@@ -75,8 +77,9 @@ const updateFilme = async function(objeticFilme){
                 duracao          = '${objeticFilme.duracao}',
                 valor            = '${objeticFilme.valor}',
                 avaliacao        = if('${objeticFilme.avaliacao}' = '', null, '${objeticFilme.avaliacao}')
-                id_classificacao = ${objeticFilme.id_classificacao} 
 	        where id             = ${objeticFilme.id}`
+
+            // id_classificacao = ${objeticFilme.id_classificacao} 
 
         let result = await kenexConection.raw(slq)
 
