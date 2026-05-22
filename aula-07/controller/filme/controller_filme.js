@@ -244,7 +244,7 @@ const buscarFilme = async function(id){
                                 delete filme.id_classificacao 
                             }
                         }
-                        
+
                         customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_200_RESPONSE.status
                         customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_200_RESPONSE.status_code
                         customMessage.DEFAULT_MESSAGE.response.filme = result
@@ -388,5 +388,3 @@ module.exports = {
     buscarFilme,
     excluirFilme
 }
-
-listarFilme()
