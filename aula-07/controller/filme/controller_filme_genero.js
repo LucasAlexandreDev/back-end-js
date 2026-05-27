@@ -245,6 +245,29 @@ const excluirFilmeGenero = async function(id){
 }
 
 
+
+// Função responsável para excluir a relação de Gêneros com o filme 
+const excluirGenerosIdFilme = async function(idFilme){
+
+    let customMessage = JSON.parse(JSON.stringify(configMessages))   
+
+    try {
+
+            // Chama a função do DAO do delete e passa o id
+            let result = filmeGeneroDAO.deleteGenerosByIdFilme(idFilme)
+
+            if(result){
+                return customMessage.SUCESS_200_DELETE_ITEM // 200
+            
+            }else{
+                return customMessage.ERROR_500_INTERNAL_SERVER_MODEL // 500 (model)
+            }
+
+    } catch (error) {
+        return customMessage.ERROR_500_INTERNAL_SERVER_CONTROLLER // 500 (controller)
+    }
+}
+
 // -------------- | FUNCTIONS INNER JOINS | -------------- 
 
 
@@ -380,5 +403,6 @@ module.exports = {
     buscarFilmeGenero,
     buscarGenerosIdFilme,
     buscarFilmesIdGenero,
-    excluirFilmeGenero
+    excluirFilmeGenero,
+    excluirGenerosIdFilme
 }

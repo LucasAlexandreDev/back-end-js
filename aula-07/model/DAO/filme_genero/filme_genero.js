@@ -216,6 +216,27 @@ const deleteFilmeGenero = async function(id){
     }
 }
 
+// Função responsável por Excluir os Gêneros relacionados com um Filme | filtro = ID Filme
+// Essa função será utilizada no PUT do filme 
+const deleteGenerosByIdFilme = async function(idFilme){
+
+    try {
+        
+        let slq = `delete from tbl_filme_genero where id_filme = ${idFilme};`
+
+        let result = await kenexConection.raw(slq)
+
+        if(result){
+            return true
+        
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
+}
 
 module.exports = {
     insertFilmeGenero,
@@ -224,5 +245,6 @@ module.exports = {
     selectByIdfilmeGenero,
     selectGenerosByIdFilme,
     selectFilmesByIdGenero,
-    deleteFilmeGenero
+    deleteFilmeGenero,
+    deleteGenerosByIdFilme
 }

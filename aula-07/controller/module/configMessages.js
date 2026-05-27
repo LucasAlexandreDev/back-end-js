@@ -33,6 +33,8 @@ const ERROR_500_INTERNAL_SERVER_CONTROLLER = {status: false, status_code: 500, m
 
 const SUCESS_201_CREAT_ITEM                = {status: true, status_code: 201, message: 'item novo inserido com sucesso!'}
 
+const SUCESS_201_CREAT_ITEM_WARNING        = {status: true, status_code: 201, message: 'item novo inserido com sucesso, porém alguns dados houveram problemas no cadastro [DADOS DE RELACIONAMENTO]'}
+
 const SUCESS_200_RESPONSE                  = {status: true, status_code: 200}
 
 const SUCESS_200_UPDATED_ITEM              = {status: true, status_code: 200, message: 'item atualizado com sucesso!'} 
@@ -52,6 +54,7 @@ module.exports = {
     SUCESS_200_RESPONSE,
     SUCESS_200_UPDATED_ITEM,
     SUCESS_201_CREAT_ITEM,
+    SUCESS_200_DELETE_ITEM,
+    SUCESS_201_CREAT_ITEM_WARNING
     //SUCESS_204_DELETE_ITEM
-    SUCESS_200_DELETE_ITEM
 }

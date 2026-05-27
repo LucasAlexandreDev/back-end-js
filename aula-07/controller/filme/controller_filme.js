@@ -20,7 +20,7 @@ const filmeDAO       = require('../../model/DAO/filme/filme.js')
 const controllerFilmeGenero = require('../filme/controller_filme_genero.js')
 
 
-// -------------- | FUNCTIONS OF CRUD | -------------- 
+// -------------- | FUNCTIONS OF CRUD N:N | -------------- 
 
 
 // Função responsável por inserir um novo filme 
@@ -52,17 +52,21 @@ const inserirNovoFilme = async function(objectFilme, contentType){
                     // Manipulação dos dados da tbl 'filme_genero' | Código base para ser aplicado em relacionamento de 1:N | Inserir os gêneros relacionados com o Filme 
 
                     // Percorre o ARRAY de generos | dados vão chegar na requisição pelo objeto filme | dentro do objeto filme vai haver um atributo 'genero' 
-                    for(itemFilme of objectFilme.genero){
+                    for(itemGenero of objectFilme.genero){
 
                         let objectFilmeGenero = 
                         {
                             'id_filme' : objectFilme.id, 
-                            'id_genero': itemFilme.id
+                            'id_genero': itemGenero.id
                         }
 
                         let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(objectFilmeGenero)
                         
-                        console.log(resultFilmeGenero)
+                        // Validação para verificar se todos os itens de relacionamentos foram inseridos
+                        if(!resultFilmeGenero.status){
+                            return customMessage.SUCESS_201_CREAT_ITEM_WARNING // 201 com alerta de cadastro
+                            
+                        }
                     }
 
                     customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCESS_201_CREAT_ITEM.status
@@ -115,6 +119,29 @@ const atualizarFilme = async function(objectFilme, id, contentType){
                     
                     // Se o DAO me retornou um true, eu conseguir atualizar no DB e fazemos um 200 dentro de if(result) | Se o DAO me retornou um false, entra no else (com erro 500 na model - DAO) 
                     if(result){ 
+
+                        // Excluir as relações entre o filme e os gêneros (tabela de relação)
+                        let resultDeleteGeneros = await controllerFilmeGenero.excluirGenerosIdFilme(objectFilme.id)
+
+                        if(resultDeleteGeneros.status){
+
+                            for(itemGenero of objectFilme.genero){
+
+                                let objectFilmeGenero = 
+                                {
+                                    "id_filme" : objectFilme.id, 
+                                    "id_genero": itemGenero.id
+                                }
+        
+                                let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(objectFilmeGenero)
+                                
+                                // Validação para verificar se todos os itens de relacionamentos foram inseridos
+                                if(!resultFilmeGenero.status){
+                                    return customMessage.SUCESS_201_CREAT_ITEM_WARNING // 201 com alerta de cadastro
+                                }
+                            }
+                        }
+                        
                         customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCESS_200_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCESS_200_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCESS_200_UPDATED_ITEM.message
@@ -167,26 +194,36 @@ const listarFilme = async function(){
                     Para cada repetição percorrida no 'result' vai ser atribuido na variável filme
                     Percorre o ARRAY de Filmes
                 */
-                // for(filme of result){
-
-                //     /*
-                //         Chama a função dentro da controller de classificacao
-                //         Passa o id_classificacao ID referente a FK de classificacao
-                //         A function 'buscarClassificacao' vai retornar um JSON referente aquele ID (FK) de classificacao
                     
-                //     */
-                //     let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+                    for(filme of result){
 
-                //     // Se o status_code for true do retorno da function 'buscarClassificacao' | Se encontrar o ID
-                //     if(resultClassificacao.status){ 
+                    /*
+                        Chama a função dentro da controller de classificacao
+                        Passa o id_classificacao ID referente a FK de classificacao
+                        A function 'buscarClassificacao' vai retornar um JSON referente aquele ID (FK) de classificacao
+                    
+                    */
+                    let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
 
-                //         // Adiciona um atributo de classificação no JSON de filme e colocar o resuktado com os dados da classificação
-                //         filme.classificacao = resultClassificacao.response.classificacao
+                    // Se o status_code for true do retorno da function 'buscarClassificacao' | Se encontrar o ID
+                    if(resultClassificacao.status){ 
+
+                        // Adiciona um atributo de classificação no JSON de filme e colocar o resuktado com os dados da classificação
+                        filme.classificacao = resultClassificacao.response.classificacao
                         
-                //         // Remove o atributo de 'id_classificacao' do JSON de filme
-                //         delete filme.id_classificacao 
-                //     }
-                // }
+                        // Remove o atributo de 'id_classificacao' do JSON de filme
+                        delete filme.id_classificacao 
+
+                         // Manipulação de daods para retornar os Gêneros relacionados ao filme (Relacionamento filme x genero)
+
+                        let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+                        
+                        // Adciona dentro do atributo 'result.respose.filme_genero ' o resultado do filme.genero
+                        if(resultGeneros.status){
+                            filme.genero = result.respose.filme_genero 
+                        }
+                    }
+                }
 
                 customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_200_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_200_RESPONSE.status_code
@@ -241,26 +278,35 @@ const buscarFilme = async function(id){
                             Para cada repetição percorrida no 'result' vai ser atribuido na variável filme
                             Percorre o ARRAY de Filmes
                         */
-                        // for(filme of result){
+                        for(filme of result){
 
-                        //     /*
-                        //         Chama a função dentro da controller de classificacao
-                        //         Passa o id_classificacao ID referente a FK de classificacao
-                        //         A function 'buscarClassificacao' vai retornar um JSON referente aquele ID (FK) de classificacao
+                            /*
+                                Chama a função dentro da controller de classificacao
+                                Passa o id_classificacao ID referente a FK de classificacao
+                                A function 'buscarClassificacao' vai retornar um JSON referente aquele ID (FK) de classificacao
                             
-                        //     */
-                        //     let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+                            */
+                            let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
 
-                        //     // Se o status_code for true do retorno da function 'buscarClassificacao' | Se encontrar o ID
-                        //     if(resultClassificacao.status){ 
+                            // Se o status_code for true do retorno da function 'buscarClassificacao' | Se encontrar o ID
+                            if(resultClassificacao.status){ 
 
-                        //         // Adiciona um atributo de classificação no JSON de filme e colocar o resuktado com os dados da classificação
-                        //         filme.classificacao = resultClassificacao.response.classificacao
+                                // Adiciona um atributo de classificação no JSON de filme e colocar o resuktado com os dados da classificação
+                                filme.classificacao = resultClassificacao.response.classificacao
                                 
-                        //         // Remove o atributo de 'id_classificacao' do JSON de filme
-                        //         delete filme.id_classificacao 
-                        //     }
-                        // }
+                                // Remove o atributo de 'id_classificacao' do JSON de filme
+                                delete filme.id_classificacao 
+                            }
+
+
+                            // Manipulação de daods para retornar os Gêneros relacionados ao filme (Relacionamento N:N)
+
+                            let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+                            
+                            if(resultGeneros.status){
+                                filme.genero = result.respose.filme_genero 
+                            }
+                        }
 
                         customMessage.DEFAULT_MESSAGE.status         = customMessage.SUCESS_200_RESPONSE.status
                         customMessage.DEFAULT_MESSAGE.status_code    = customMessage.SUCESS_200_RESPONSE.status_code
